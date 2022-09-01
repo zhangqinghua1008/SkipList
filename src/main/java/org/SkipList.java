@@ -16,11 +16,17 @@ public class SkipList {
 
     public static int MAX_LEVEL = 10;
 
+    // 跳表头节点
     private Node head;
+
+    private int size;
 
     // 初始化
     public SkipList() {
         this.head = new Node(0, MAX_LEVEL);
+        this.size = 0;
+
+        // 初始化每一层的头节点
         Node pHead = head;
         for (int i = MAX_LEVEL - 1; i >= 0; i--) {
             Node levelHead = new Node(0, i);
@@ -39,13 +45,14 @@ public class SkipList {
         for (int i = 1; i < num; i++) {
             add(i);
         }
+        this.size = num;
     }
 
     /**
      * skipList的大小
      */
     public int size() {
-        return 0;
+        return this.size;
     }
 
     /**
@@ -87,6 +94,8 @@ public class SkipList {
         for (int i = 0; i < levelsNode.size() - 1; i++) {
             levelsNode.get(i).down = levelsNode.get(i + 1);
         }
+
+        this.size++;
     }
 
     // 抛硬币算法 获得层数
@@ -146,6 +155,7 @@ public class SkipList {
         Node levelPreNode = findPrevious(data);  // 找到数据所在最高层的前一个节点
         if (levelPreNode == null) {
             System.out.println("跳表中没有该数据");
+            return;
         }
 
         // 删除当前层的节点
@@ -159,9 +169,21 @@ public class SkipList {
             levelPreNode = nextLevelPreNode;
             levelPreNode.next = levelPreNode.next.next;
         }
-
+        this.size--;
     }
 
+    /**
+     * 清空跳表
+     */
+    public void clean() {
+        this.size = 0;
+        Node node = this.head;
+        // 逐层删除
+        for (int i = MAX_LEVEL; i >= 0; i--) {
+            node.next = null;
+            node = node.down;
+        }
+    }
 
     /**
      * 展示
