@@ -58,7 +58,7 @@ public class SkipList {
     /**
      * 增
      */
-    private void add(int data) {
+    public void add(int data) {
         int addLevel = getRandomLevel();  // 抛硬币算法 获得层数
 
         Node addLevelLocal = this.head;  // 添加的位置
