@@ -47,7 +47,6 @@ public class Main {
         System.out.println("跳表大小：" + skipList.size());
     }
 
-
     /**
      * 测试跳表性能测试
      */
@@ -66,20 +65,23 @@ public class Main {
             multiThreadAdd(skipList, 4, arrayCount);
             skipList.clean();
         }
+
+        // 查询新能测试:100W数据中查询10W次
+        searchTest(skipList, 1000000, 1000);
     }
 
     private static void oneThreadAdd(SkipList skipList, int count) {
         Date startTime = new Date();
-        Random random = new Random(Integer.MAX_VALUE);
+        Random random = new Random();
         // 单线程插入
         for (int i = 1; i <= count; i++) {
-            skipList.add(random.nextInt());
+            skipList.add(random.nextInt(Integer.MAX_VALUE));
         }
         System.out.printf("跳表大小：%d ; ", skipList.size());
         System.out.printf("单线程插入数量%2dW， 花费时间(秒): %.3f\n", count / 10000, (double) (new Date().getTime() - startTime.getTime()) / 1000);
     }
 
-    // 多线程插入
+    // 多线程插入性能测试
     private static synchronized void multiThreadAdd(SkipList skipList, int threadNumber, int count) {
         Date startTime = new Date();
 
@@ -111,4 +113,33 @@ public class Main {
         System.out.printf("跳表大小：%d ; ", skipList.size());
         System.out.printf("多线程随机插入花费时间(秒): %.3f\n", (double) (new Date().getTime() - startTime.getTime()) / 1000);
     }
+
+    private static void searchTest(SkipList skipList, int countNum, int searchCount) {
+        int nextInt = 3000000; // 随机数范围
+        // 新增countNum哥数据
+        addData(skipList, countNum, nextInt);
+
+        Date startTime = new Date();
+        int ans = 0;
+        Random random = new Random();
+        for (int i = 0; i < searchCount; i++) {
+            // 查询
+            if (skipList.find(random.nextInt(nextInt)) != null)
+                ans++;
+        }
+        System.out.println("查询次数：" + searchCount + "  找到次数：" + ans);
+        System.out.printf("查询时间(s): %3f", (double) (new Date().getTime() - startTime.getTime()) / 1000);
+    }
+
+    private static void addData(SkipList skipList, int count, int nextInt) {
+        Date startTime = new Date();
+        Random random = new Random();
+        // 单线程插入
+        for (int i = 1; i <= count; i++) {
+            skipList.add(random.nextInt(nextInt));
+        }
+        System.out.printf("跳表大小：%d ; ", skipList.size());
+        System.out.printf("单线程插入数量%2dW， 花费时间(秒): %.3f\n", count / 10000, (double) (new Date().getTime() - startTime.getTime()) / 1000);
+    }
+
 }

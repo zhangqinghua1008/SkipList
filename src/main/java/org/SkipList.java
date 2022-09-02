@@ -14,7 +14,7 @@ import java.util.Random;
 @Data
 public class SkipList {
 
-    public static int MAX_LEVEL = 10;
+    public static int MAX_LEVEL = 32;
 
     // 跳表头节点
     private Node head;
